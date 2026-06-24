@@ -198,18 +198,21 @@ This means the very first time a season is shown in Edit Images after upgrading,
 dotnet build -c Release
 # → bin/Release/net9.0/Jellyfin.Plugin.BetterPosterMinimal.dll
 
-# 2. Pack the zip (deterministic)
+# 2. Pick your target version. Edit ZIP_NAME at the top of build_plugin_zip.py
+#    and the matching `version` + `changelog` fields in INNER_META, then pack:
 python build_plugin_zip.py
-# → releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
-# → releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip.md5   (lowercase hex)
+# → releases/Jellyfin.Plugin.BetterPosterMinimal-<version>.zip
+# → releases/Jellyfin.Plugin.BetterPosterMinimal-<version>.zip.md5   (lowercase hex)
 
 # 3. (Windows equivalent of step 2's MD5 line)
-certutil -hashfile releases\Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip MD5
+certutil -hashfile releases\Jellyfin.Plugin.BetterPosterMinimal-<version>.zip MD5
 # On *nix:
-md5sum releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
+md5sum releases/Jellyfin.Plugin.BetterPosterMinimal-<version>.zip
 
-# 4. Paste the UPPERCASE MD5 into manifest.json > versions[0].checksum
-#    and commit both files (the zip AND the bumped manifest checksum).
+# 4. Append a new entry to manifest.json > versions[] for the target <version>,
+#    set its checksum to the UPPERCASE hex from step 3, set its sourceUrl to
+#    the raw.githubusercontent URL for the new zip, and update the top-level
+#    versions array. Commit both files (the zip AND the bumped manifest).
 ```
 
 * The build script uses fixed ZipInfo mtimes, so a clean rebuild of *unchanged* C# is byte‑identical to the previous zip. The MD5 only changes when the inner `meta.json` (description / overview / imageUrl / etc.) or the DLL itself changes.
@@ -233,8 +236,8 @@ md5sum releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
 │   └── configPage.html                      # Embedded Dashboard settings UI
 ├── build_plugin_zip.py                      # dotnet build → zip + MD5 (deterministic)
 └── releases/
-    ├── Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
-    └── Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip.md5
+    ├── Jellyfin.Plugin.BetterPosterMinimal-<version>.zip
+    └── Jellyfin.Plugin.BetterPosterMinimal-<version>.zip.md5
 ```
 
 ## Credits and license
