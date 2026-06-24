@@ -21,9 +21,9 @@ A focused remote-image provider for [Jellyfin](https://jellyfin.org) that surfac
 6. [Scheduled refresh](#scheduled-refresh)
 7. [Per‑item usage](#per-item-usage)
 8. [Troubleshooting](#troubleshooting)
-9. [Build & release (maintainers)](#build--release-maintainers)
+9. [Build and release (maintainers)](#build-and-release-maintainers)
 10. [Repo layout](#repo-layout)
-11. [Credits & license](#credits--license)
+11. [Credits and license](#credits-and-license)
 
 ---
 
@@ -56,7 +56,7 @@ This is the **minimal**, focused fork of the parent BetterPoster plugin. To keep
 
 * **Jellyfin server:** 10.11.x or newer with the matching plugin ABI (`10.11.0.0`).
 * **Outbound HTTPS** from the Jellyfin host to `btttr.cc` (TCP 443).
-* **Provider IDs:** items must carry an IMDb ID (or a TMDB ID if you enable the fallback). Anything that already worked with Jellyfin's AniDB or TMDB metadata plugins qualifies.
+* **Provider IDs:** items that carry an IMDb ID are surfaced automatically; items that only carry a TMDB ID are surfaced when **Fallback to TMDB** is on.
 
 ## Installation
 
@@ -121,7 +121,7 @@ A **Test IMDb ID** field (defaulting to *tt0111161* — The Shawshank Redemption
 
 ## Scheduled refresh
 
-A task called **Better Poster — Refresh Posters** (in the *Better Poster* category) is registered automatically when the plugin installs. Default cadence: **every 24 hours**. Change the cadence from **Dashboard → Scheduled Tasks → Better Poster → Better Poster — Refresh Posters**.
+A task called **Better Poster - Refresh Posters** (in the *Better Poster* category) is registered automatically when the plugin installs. Default cadence: **every 24 hours**. Change the cadence from **Dashboard → Scheduled Tasks → Better Poster → Better Poster - Refresh Posters**.
 
 On each run the task walks every Movie / Series / Season matching the enabled item‑type toggles and asks Jellyfin's image provider pipeline to re‑resolve the primary image. The "Last successful fetch" timestamp is bumped whenever at least one item succeeds.
 
@@ -156,7 +156,7 @@ This means the very first time a season is shown in Edit Images after upgrading,
 * **"Last successful fetch: never" persists even after Refresh Posters runs.** The timestamp is only bumped when *at least one* item succeeds. If every item returned empty (no ID, no fallback match) or the refresh task was killed mid‑run, the timestamp stays at "never". Opening a single Movie → Edit Images → Search will trigger the success path independently.
 * **Toggle changes don't seem to take effect.** Jellyfin caches the resolution per item. After a toggle change, hit **Edit Images → Search** again on a single item, or wait for the next scheduled refresh.
 
-## Build & release (maintainers only)
+## Build and release (maintainers)
 
 ```bash
 # 1. Build the DLL
@@ -192,7 +192,7 @@ md5sum releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
 ├── PluginServiceRegistrator.cs              # DI for image provider + scheduled task
 ├── BtttrImageProvider.cs                    # IRemoteImageProvider (Movies / Series / Seasons)
 ├── BtttrPosterUrlBuilder.cs                 # Pure URL builder (no I/O)
-├── BetterPostersRefreshTask.cs              # "Better Poster — Refresh Posters" task
+├── BetterPostersRefreshTask.cs              # "Better Poster - Refresh Posters" task
 ├── Configuration/
 │   ├── PluginConfiguration.cs               # Settings DTO
 │   └── configPage.html                      # Embedded Dashboard settings UI
@@ -202,7 +202,7 @@ md5sum releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
     └── Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip.md5
 ```
 
-## Credits & license
+## Credits and license
 
 * Poster overlays are rendered by **[btttr.cc](https://btttr.cc)** — please consider supporting the service if you find it useful.
 * The plugin skeleton follows the conventions of the [Jellyfin plugin template](https://github.com/jellyfin/jellyfin-plugin-template) project.
