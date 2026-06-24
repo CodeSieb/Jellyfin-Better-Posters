@@ -18,7 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent
 DLL_PATH = PROJECT_ROOT / "bin" / "Release" / "net9.0" / "Jellyfin.Plugin.BetterPosterMinimal.dll"
 OUT_DIR = PROJECT_ROOT / "releases"
-ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip"
+ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.1.0.zip"
 
 # Inner metadata that Jellyfin reads from inside the plugin zip.
 INNER_META = {
@@ -34,13 +34,15 @@ INNER_META = {
     "imageUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/Jellyfin-Better-Posters-Image.png",
     "name": "Better Poster Minimal",
     "targetAbi": "10.11.0.0",
-    "version": "1.0.0.0",
+    "version": "1.0.1.0",
     "framework": "net9.0",
     "timestamp": "2026-06-24T00:00:00Z",
     "changelog": (
-        "Initial Minimal Release. btttr.cc remote image provider for Movies and TV "
-        "Series; IMDb-first with TMDB fallback; per-type enable toggles; settings "
-        "preview button; reset-to-defaults button; scheduled refresh task."
+        "Fix a startup crash on Jellyfin 10.11.x: registered services through "
+        "BasePlugin<TConfig>.RegisterServices (the legacy IPluginServiceRegistrator path "
+        "is no longer reliably called by the plugin loader) and set TaskTriggerInfo.Type "
+        "explicitly to TaskTriggerInfoType.Interval so the default 24 h trigger parses "
+        "cleanly. No user-facing behavior changes from 1.0.0."
     ),
 }
 
