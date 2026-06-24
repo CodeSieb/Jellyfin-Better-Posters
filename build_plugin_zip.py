@@ -17,7 +17,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 DLL_PATH = PROJECT_ROOT / "bin" / "Release" / "net9.0" / "Jellyfin.Plugin.BetterPosterMinimal.dll"
-OUT_DIR = PROJECT_ROOT / "dist"
+OUT_DIR = PROJECT_ROOT / "releases"
 ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip"
 
 # Inner metadata that Jellyfin reads from inside the plugin zip.
@@ -54,9 +54,27 @@ def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     zip_path = OUT_DIR / ZIP_NAME
 
+    # Fixed ZipInfo timestamps so the zip is byte-identical across runs.
+    # Without this, every regeneration produces a different MD5 even though
+    # the file contents are unchanged, which makes the manifest checksum
+    # field and the actual zip drift apart every time you rebuild.
+    FIXED_DATETIME = (1980, 1, 1, 0, 0, 0)  # ZIP epoch
+
+    def info_for(name: str) -> zipfile.ZipInfo:
+        info = zipfile.ZipInfo(filename=name, date_time=FIXED_DATETIME)
+        info.compress_type = zipfile.ZIP_DEFLATED
+        info.external_attr = 0o644 << 16
+        return info
+
     with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr("meta.json", json.dumps(INNER_META, indent=2, sort_keys=True))
-        zf.write(DLL_PATH, arcname="Jellyfin.Plugin.BetterPosterMinimal.dll")
+        zf.writestr(
+            info_for("meta.json"),
+            json.dumps(INNER_META, indent=2, sort_keys=True),
+        )
+        zf.writestr(
+            info_for("Jellyfin.Plugin.BetterPosterMinimal.dll"),
+            DLL_PATH.read_bytes(),
+        )
 
     md5_hex = hashlib.md5(zip_path.read_bytes()).hexdigest()
 

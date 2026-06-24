@@ -8,12 +8,8 @@ __pycache__/
 
 # OS junk
 .DS_Store
-Thumbs.db
-
-# IDE
+Thumbs.db# IDE
 .vs/
 .vscode/
 .idea/
 
-# Local-only release artifact (rebuilt via build_plugin_zip.py)
-dist/

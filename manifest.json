@@ -12,8 +12,8 @@
         "version": "1.0.0.0",
         "changelog": "Initial Minimal Release. btttr.cc remote image provider for Movies and TV Series; IMDb-first with TMDB fallback; per-type enable toggles; settings preview button; reset-to-defaults button; scheduled refresh task (24h default).",
         "targetAbi": "10.11.0.0",
-        "sourceUrl": "https://github.com/CodeSieb/Jellyfin-Better-Posters/releases/download/v1.0.0/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip",
-        "checksum": "B796C8E54A2C3CC57A47E5F24CF13F54",
+        "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip",
+        "checksum": "7358140F002B1D9C722D0ABE1AE85667",
         "timestamp": "2026-06-24T00:00:00Z"
       }
     ]
