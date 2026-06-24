@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
+using MediaBrowser.Controller;
+using MediaBrowser.Controller.Plugins;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Providers;
@@ -16,7 +18,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
     /// for Movies and TV Series. IMDb-first with TMDB fallback, optional scheduled
     /// refresh, settings preview, and Reset to Defaults.
     /// </summary>
-    public class Plugin : BasePlugin<Configuration.PluginConfiguration>, IHasWebPages
+    public class Plugin : BasePlugin<Configuration.PluginConfiguration>, IHasWebPages, IPluginServiceRegistrator
     {
         public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer)
             : base(applicationPaths, xmlSerializer)
@@ -30,12 +32,14 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
 
         public static Plugin? Instance { get; private set; }
 
-        public override void RegisterServices(IServiceCollection serviceCollection)
+        /// <summary>
+        /// Jellyfin 10.11.x plugin service registration entry point. The
+        /// plugin host enumerates every <see cref="IPluginServiceRegistrator"/>
+        /// in the plugin assembly at server startup and calls this method so
+        /// we can wire our image provider and scheduled task into DI.
+        /// </summary>
+        public void RegisterServices(IServiceCollection serviceCollection, IServerApplicationHost applicationHost)
         {
-            // Modern DI registration entry point used by Jellyfin 10.11.x.
-            // The legacy IPluginServiceRegistrator path is no longer reliably
-            // called, so this is the only path that wires the image
-            // provider and scheduled task into Jellyfin's DI container.
             serviceCollection.AddSingleton<IRemoteImageProvider, BtttrImageProvider>();
             serviceCollection.AddSingleton<IScheduledTask, BetterPostersRefreshTask>();
         }
