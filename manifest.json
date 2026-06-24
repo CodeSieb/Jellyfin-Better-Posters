@@ -47,6 +47,14 @@
         "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.4.0.zip",
         "checksum": "60AD6536CF26BF49CD1BAA1AD027D39E",
         "timestamp": "2026-06-24T00:00:00Z"
+      },
+      {
+        "version": "1.0.4.1",
+        "changelog": "Add an 'Enable Ratings For Seasons' toggle (default off) so season-posters that would have used the bare-rating path 'poster-r' now use the genre path 'poster-g' instead. btttr.cc does not render 'poster-r' for season variants (the season URL silently 404'd against '/imdb/poster-default/tt...:season:N.jpg'); the genre path absorbs rating into the bottom strip and renders correctly. Movie and series behavior is unchanged. Carry through the 1.0.4.0 path-letter fix and the URL Patterns Reference panel from the previous release.",
+        "targetAbi": "10.11.11.0",
+        "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.4.1.zip",
+        "checksum": "3A4D21158ACB011CB7CD9C3B4A54A40C",
+        "timestamp": "2026-06-24T00:00:00Z"
       }
     ]
   }

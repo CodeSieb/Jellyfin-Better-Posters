@@ -58,6 +58,14 @@ namespace Jellyfin.Plugin.BetterPosterMinimal.Configuration
         public bool EnableForSeries { get; set; } = true;
         public bool EnableForSeasons { get; set; } = true;
 
+        // When true, season variants rewrite the bare-rating path (EnableRating=on,
+        // EnableGenre=off) from `poster-r` to `poster-g`. btttr.cc doesn't render
+        // `poster-r/.../season:N` (it silently 404s), but it does render `poster-g`
+        // for season variants with the rating absorbed into the same bottom strip.
+        // Setting this on restores working rating-inclusive poster URLs for seasons
+        // without changing any non-season behavior.
+        public bool EnableRatingForSeasons { get; set; } = false;
+
         // When IMDb is missing, try TMDB. (Many series have TMDB as the primary ID.)
         public bool FallbackToTmdb { get; set; } = true;
 

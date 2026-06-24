@@ -24,7 +24,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
             if (string.IsNullOrWhiteSpace(id))
                 throw new ArgumentException("id must not be empty.", nameof(id));
 
-            var path = GetPosterPath(configuration);
+            var path = GetPosterPath(configuration, forSeason: false);
             return AppendQuery(
                 string.Format(
                     CultureInfo.InvariantCulture,
@@ -49,7 +49,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
             if (seasonNumber <= 0)
                 throw new ArgumentOutOfRangeException(nameof(seasonNumber), seasonNumber, "Season numbers are 1-based.");
 
-            var path = GetPosterPath(configuration);
+            var path = GetPosterPath(configuration, forSeason: true);
             var url = string.Format(
                 CultureInfo.InvariantCulture,
                 "{0}/{1}/{2}/poster-default/{3}:season:{4}.jpg",
@@ -109,7 +109,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
                 Uri.EscapeDataString(p.Value))));
         }
 
-        private static string GetPosterPath(PluginConfiguration configuration)
+        private static string GetPosterPath(PluginConfiguration configuration, bool forSeason)
         {
             // Path letter rule (matches btttr.cc's poster-<X> scheme; verified on
             // 2026-06-24 that EVERY user-spec pattern returns HTTP 200 from btttr.cc
@@ -124,10 +124,24 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
             // The path always carries at least one of {g, r, n}, so the URL never
             // collapses to a bare `poster/` when the plain poster would no longer
             // match the rendered variant on the service.
-            string baseLetter =
-                configuration.EnableGenre ? "g"
-                : configuration.EnableRating ? "r"
-                : "n";
+            string baseLetter;
+
+            if (configuration.EnableGenre)
+            {
+                baseLetter = "g";
+            }
+            else if (configuration.EnableRating)
+            {
+                // For season variants, btttr.cc doesn't render `poster-r/.../season:N`.
+                // When EnableRatingForSeasons is on, demote 'r' to 'g' so the request
+                // matches the genre path the service actually renders for seasons
+                // (rating is absorbed into the same bottom strip).
+                baseLetter = (forSeason && configuration.EnableRatingForSeasons) ? "g" : "r";
+            }
+            else
+            {
+                baseLetter = "n";
+            }
 
             var suffix = baseLetter;
 

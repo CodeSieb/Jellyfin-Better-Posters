@@ -18,7 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent
 DLL_PATH = PROJECT_ROOT / "bin" / "Release" / "net9.0" / "Jellyfin.Plugin.BetterPosterMinimal.dll"
 OUT_DIR = PROJECT_ROOT / "releases"
-ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.4.0.zip"
+ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.4.1.zip"
 
 # Inner metadata that Jellyfin reads from inside the plugin zip.
 INNER_META = {
@@ -34,19 +34,17 @@ INNER_META = {
     "imageUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/Jellyfin-Better-Posters-Image.png",
     "name": "Better Poster Minimal",
     "targetAbi": "10.11.11.0",
-    "version": "1.0.4.0",
+    "version": "1.0.4.1",
     "framework": "net9.0",
     "timestamp": "2026-06-24T00:00:00Z",
     "changelog": (
-        "Add a URL Patterns Reference panel to the settings page that documents all "
-        "seven btttr.cc URL variants and the path-letter rule (verified live HTTP 200 on "
-        "2026-06-24 against tt0111161). Fix GetPosterPath so 'g' is preserved in the "
-        "path whenever Genre is on — the previous XOR-style mapping collapsed to a bare "
-        "'poster/' path when both Genre and Rating were on, which did not match the "
-        "service's documented 'all combined' pattern 'poster-gqa'. Mirror the same "
-        "path-letter rule inside the JS preview-builder so the Dashboard URL always "
-        "matches the URL the plugin actually composes. No public behavior change beyond "
-        "URL paths now correctly tracking the service's documented poster-<X> scheme."
+        "Add an 'Enable Ratings For Seasons' toggle (default off) so season-posters "
+        "that would have used the bare-rating path 'poster-r' now use the genre path "
+        "'poster-g' instead. btttr.cc does not render 'poster-r' for season variants "
+        "(the season URL silently 404'd against '/imdb/poster-default/tt...:season:N.jpg'); "
+        "the genre path absorbs rating into the bottom strip and renders correctly. "
+        "Movie and series behavior is unchanged. Carry through the 1.0.4.0 path-letter "
+        "fix and the URL Patterns Reference panel from the previous release."
     ),
 }
 

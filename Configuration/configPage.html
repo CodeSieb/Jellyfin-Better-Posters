@@ -130,6 +130,16 @@
 
                     <div class="checkboxContainer checkboxContainer-withDescription">
                         <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkEnableRatingForSeasons" name="EnableRatingForSeasons" />
+                            <span>Enable Ratings For Seasons</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            btttr.cc doesn't render the bare-rating path (<code>poster-r</code>) for season variants &mdash; those season URLs silently 404. Turn this on to demote <code>poster-r</code> to the genre path (<code>poster-g</code>) for season posters, which renders correctly (rating absorbed into the genre strip). Has no effect on movies or series.
+                        </div>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
                             <input is="emby-checkbox" type="checkbox" id="chkFallbackToTmdb" name="FallbackToTmdb" />
                             <span>Fallback to TMDB ID when IMDb is missing</span>
                         </label>
@@ -256,6 +266,7 @@
                     EnableForMovies: true,
                     EnableForSeries: true,
                     EnableForSeasons: true,
+                    EnableRatingForSeasons: false,
                     FallbackToTmdb: true
                 };
 
@@ -289,6 +300,7 @@
                         EnableForMovies: form.querySelector('#chkEnableForMovies').checked,
                         EnableForSeries: form.querySelector('#chkEnableForSeries').checked,
                         EnableForSeasons: form.querySelector('#chkEnableForSeasons').checked,
+                        EnableRatingForSeasons: form.querySelector('#chkEnableRatingForSeasons').checked,
                         FallbackToTmdb: form.querySelector('#chkFallbackToTmdb').checked
                     };
                 }
@@ -304,6 +316,7 @@
                     form.querySelector('#chkEnableForMovies').checked = config.EnableForMovies !== false;
                     form.querySelector('#chkEnableForSeries').checked = config.EnableForSeries !== false;
                     form.querySelector('#chkEnableForSeasons').checked = config.EnableForSeasons !== false;
+                    form.querySelector('#chkEnableRatingForSeasons').checked = !!config.EnableRatingForSeasons;
                     form.querySelector('#chkFallbackToTmdb').checked = config.FallbackToTmdb !== false;
                     var statusEl = form.querySelector('#lastFetchStatus');
                     if (statusEl) statusEl.textContent = formatLastFetch(config.LastSuccessfulFetchUtc);
