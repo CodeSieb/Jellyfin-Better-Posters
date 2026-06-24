@@ -1,0 +1,19 @@
+# Build output
+bin/
+obj/
+
+# Python caches
+__pycache__/
+*.pyc
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Local-only release artifact (rebuilt via build_plugin_zip.py)
+dist/

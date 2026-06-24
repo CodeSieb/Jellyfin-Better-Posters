@@ -1,0 +1,311 @@
+<div id="BetterPosterMinimalConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-button,emby-select,emby-checkbox">
+    <div data-role="content">
+        <div class="content-primary">
+            <form id="BetterPosterMinimalConfigForm">
+                <div class="sectionTitleContainer flex align-items-center justify-content-between">
+                    <h2 class="sectionTitle">Poster Options</h2>
+                </div>
+
+                <div class="verticalFormContainer">
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkTrendTags" name="EnableTrendTags" />
+                            <span>Trend Tags</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            Trending, New, IMDb #3
+                        </div>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkQualityTags" name="EnableQualityTags" />
+                            <span>Quality Tags</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            4K, Dolby Vision, Atmos badges
+                        </div>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkGenre" name="EnableGenre" />
+                            <span>Genre</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            Genre label at bottom
+                        </div>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkRatings" name="EnableRating" />
+                            <span>Ratings</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            Star rating at bottom
+                        </div>
+                    </div>
+
+                    <div class="selectContainer">
+                        <label for="selectRatingSource">Ratings Source</label>
+                        <select is="emby-select" id="selectRatingSource" name="RatingSource" class="emby-select">
+                            <option value="Average">Average</option>
+                            <option value="Imdb">IMDb</option>
+                            <option value="Tmdb">TMDB</option>
+                            <option value="RottenTomatoes">Rotten Tomatoes</option>
+                            <option value="Metacritic">Metacritic</option>
+                            <option value="Letterboxd">Letterboxd</option>
+                            <option value="RogerEbert">Roger Ebert</option>
+                        </select>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkAgeRating" name="EnableAgeRating" />
+                            <span>Age Rating</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            PG-13, TV-MA, R
+                        </div>
+                    </div>
+
+                    <div class="selectContainer">
+                        <label for="selectLanguage">Language</label>
+                        <select is="emby-select" id="selectLanguage" name="Language" class="emby-select">
+                            <option value="English">English</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="PortugueseBrazil">Portuguese (Brazil)</option>
+                            <option value="PortuguesePortugal">Portuguese (Portugal)</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Dutch">Dutch</option>
+                            <option value="Polish">Polish</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Turkish">Turkish</option>
+                            <option value="Arabic">Arabic</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Korean">Korean</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="Hindi">Hindi</option>
+                            <option value="Swedish">Swedish</option>
+                            <option value="Czech">Czech</option>
+                        </select>
+                    </div>
+
+                    <div class="sectionTitleContainer flex align-items-center justify-content-between" style="margin-top: 1em;">
+                        <h2 class="sectionTitle">Item Types</h2>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkEnableForMovies" name="EnableForMovies" />
+                            <span>Enable for Movies</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            Surface btttr.cc posters for Movies.
+                        </div>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkEnableForSeries" name="EnableForSeries" />
+                            <span>Enable for Series</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            Surface btttr.cc posters for TV Series.
+                        </div>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkFallbackToTmdb" name="FallbackToTmdb" />
+                            <span>Fallback to TMDB ID when IMDb is missing</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            Useful for series that have only a TMDB ID.
+                        </div>
+                    </div>
+
+                    <div class="sectionTitleContainer flex align-items-center justify-content-between" style="margin-top: 1em;">
+                        <h2 class="sectionTitle">Preview</h2>
+                    </div>
+
+                    <div class="selectContainer">
+                        <label for="inputPreviewId">Test IMDb ID</label>
+                        <input is="emby-input" type="text" id="inputPreviewId" value="tt0111161" />
+                        <div class="fieldDescription">
+                            Shawshank Redemption by default. Change it and click "Preview" to render a sample btttr.cc poster using the current toggles.
+                        </div>
+                    </div>
+
+                    <button is="emby-button" type="button" id="btnPreview" class="raised block emby-button" style="margin-top: 0.5em;">
+                        <span>Preview Poster</span>
+                    </button>
+
+                    <div id="previewContainer" style="margin-top: 1em; text-align: center;">
+                        <img id="previewImage" alt="btttr.cc preview" style="max-width: 250px; max-height: 375px; display: none; border: 1px solid #444;" />
+                        <div id="previewUrl" class="fieldDescription" style="word-break: break-all; margin-top: 0.5em;"></div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75em; margin-top: 1.5em;">
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button" style="flex: 1;">
+                            <span>Save</span>
+                        </button>
+                        <button is="emby-button" type="button" id="btnReset" class="raised block emby-button" style="flex: 1;">
+                            <span>Reset to Defaults</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <script type="text/javascript">
+            (function () {
+                var pluginUniqueId = 'c2f3aaf3-f591-4a4f-b7e2-a4f1bc9c7d1e';
+
+                var defaults = {
+                    EnableTrendTags: true,
+                    EnableQualityTags: false,
+                    EnableGenre: true,
+                    EnableRating: true,
+                    RatingSource: 'Average',
+                    EnableAgeRating: false,
+                    Language: 'English',
+                    EnableForMovies: true,
+                    EnableForSeries: true,
+                    FallbackToTmdb: true
+                };
+
+                function readForm(form) {
+                    return {
+                        EnableTrendTags: form.querySelector('#chkTrendTags').checked,
+                        EnableQualityTags: form.querySelector('#chkQualityTags').checked,
+                        EnableGenre: form.querySelector('#chkGenre').checked,
+                        EnableRating: form.querySelector('#chkRatings').checked,
+                        RatingSource: form.querySelector('#selectRatingSource').value,
+                        EnableAgeRating: form.querySelector('#chkAgeRating').checked,
+                        Language: form.querySelector('#selectLanguage').value,
+                        EnableForMovies: form.querySelector('#chkEnableForMovies').checked,
+                        EnableForSeries: form.querySelector('#chkEnableForSeries').checked,
+                        FallbackToTmdb: form.querySelector('#chkFallbackToTmdb').checked
+                    };
+                }
+
+                function writeForm(form, config) {
+                    form.querySelector('#chkTrendTags').checked = !!config.EnableTrendTags;
+                    form.querySelector('#chkQualityTags').checked = !!config.EnableQualityTags;
+                    form.querySelector('#chkGenre').checked = !!config.EnableGenre;
+                    form.querySelector('#chkRatings').checked = !!config.EnableRating;
+                    form.querySelector('#selectRatingSource').value = config.RatingSource || 'Average';
+                    form.querySelector('#chkAgeRating').checked = !!config.EnableAgeRating;
+                    form.querySelector('#selectLanguage').value = config.Language || 'English';
+                    form.querySelector('#chkEnableForMovies').checked = config.EnableForMovies !== false;
+                    form.querySelector('#chkEnableForSeries').checked = config.EnableForSeries !== false;
+                    form.querySelector('#chkFallbackToTmdb').checked = config.FallbackToTmdb !== false;
+                }
+
+                function buildPreviewUrl(form) {
+                    var c = readForm(form);
+                    var id = (form.querySelector('#inputPreviewId').value || '').trim();
+                    if (!id) return null;
+
+                    var langMap = {
+                        English: null,
+                        Spanish: 'es', French: 'fr', German: 'de',
+                        PortugueseBrazil: 'pt-BR', PortuguesePortugal: 'pt-PT',
+                        Italian: 'it', Dutch: 'nl', Polish: 'pl', Russian: 'ru',
+                        Turkish: 'tr', Arabic: 'ar', Japanese: 'ja', Korean: 'ko',
+                        Chinese: 'zh', Hindi: 'hi', Swedish: 'sv', Czech: 'cs'
+                    };
+                    var rsMap = {
+                        Average: null,
+                        Imdb: 'IM', Tmdb: 'TM', RottenTomatoes: 'RT',
+                        Metacritic: 'MC', Letterboxd: 'LB', RogerEbert: 'RE'
+                    };
+
+                    var suffix = '';
+                    if (c.EnableGenre && c.EnableRating) suffix = '';
+                    else if (!c.EnableGenre && c.EnableRating) suffix = 'r';
+                    else if (c.EnableGenre && !c.EnableRating) suffix = 'g';
+                    else suffix = 'n';
+                    if (c.EnableQualityTags) suffix += 'q';
+                    if (c.EnableAgeRating) suffix += 'a';
+                    var path = suffix.length ? 'poster-' + suffix : 'poster';
+
+                    var qs = [];
+                    if (!c.EnableTrendTags) qs.push('tag=none');
+                    if (langMap[c.Language]) qs.push('lang=' + encodeURIComponent(langMap[c.Language]));
+                    if (c.EnableRating && rsMap[c.RatingSource]) qs.push('rs=' + rsMap[c.RatingSource]);
+
+                    var url = 'https://btttr.cc/' + path + '/imdb/poster-default/' + encodeURIComponent(id) + '.jpg';
+                    if (qs.length) url += '?' + qs.join('&');
+                    return url;
+                }
+
+                document.querySelector('#BetterPosterMinimalConfigPage').addEventListener('pageshow', function () {
+                    var page = this;
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginUniqueId).then(function (config) {
+                        writeForm(page.querySelector('#BetterPosterMinimalConfigForm'), config);
+                        Dashboard.hideLoadingMsg();
+                    }).catch(function () {
+                        Dashboard.hideLoadingMsg();
+                    });
+                });
+
+                var form = document.querySelector('#BetterPosterMinimalConfigForm');
+
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginUniqueId).then(function (config) {
+                        var c = readForm(form);
+                        Object.keys(c).forEach(function (k) { config[k] = c[k]; });
+                        ApiClient.updatePluginConfiguration(pluginUniqueId, config).then(function () {
+                            Dashboard.hideLoadingMsg();
+                            Dashboard.alert('Settings saved.');
+                        }).catch(function () {
+                            Dashboard.hideLoadingMsg();
+                            Dashboard.alert('Error saving settings.');
+                        });
+                    }).catch(function () {
+                        Dashboard.hideLoadingMsg();
+                    });
+                });
+
+                form.querySelector('#btnPreview').addEventListener('click', function () {
+                    var url = buildPreviewUrl(form);
+                    var img = form.querySelector('#previewImage');
+                    var urlBox = form.querySelector('#previewUrl');
+                    if (!url) {
+                        img.style.display = 'none';
+                        urlBox.textContent = 'Enter an IMDb ID to preview.';
+                        return;
+                    }
+                    img.style.display = 'inline-block';
+                    img.src = url;
+                    urlBox.innerHTML = '<strong>URL:</strong> ' + url;
+                });
+
+                form.querySelector('#btnReset').addEventListener('click', function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginUniqueId).then(function (config) {
+                        Object.keys(defaults).forEach(function (k) { config[k] = defaults[k]; });
+                        ApiClient.updatePluginConfiguration(pluginUniqueId, config).then(function () {
+                            writeForm(form, defaults);
+                            Dashboard.hideLoadingMsg();
+                            Dashboard.alert('Settings reset to defaults.');
+                        }).catch(function () {
+                            Dashboard.hideLoadingMsg();
+                            Dashboard.alert('Error resetting settings.');
+                        });
+                    }).catch(function () {
+                        Dashboard.hideLoadingMsg();
+                    });
+                });
+            })();
+        </script>
+    </div>
+</div>

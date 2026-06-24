@@ -1,0 +1,21 @@
+[
+  {
+    "guid": "c2f3aaf3-f591-4a4f-b7e2-a4f1bc9c7d1e",
+    "name": "Better Poster Minimal",
+    "overview": "Just the better posters. btttr.cc primary images for Movies and TV Series.",
+    "description": "Minimal Jellyfin plugin that surfaces btttr.cc as an Official Remote Image Provider in Jellyfin. IMDb-first with TMDB fallback, per-type enable toggles, an optional scheduled refresh task, a settings preview button, and a Reset to Defaults button. No Trakt token, no scheduled scrape, no extras.",
+    "owner": "CodeSieb",
+    "category": "Metadata",
+    "imageUrl": "https://raw.githubusercontent.com/TheAceOfficials/BetterPoster-for-Jellyfin/main/cover.png",
+    "versions": [
+      {
+        "version": "1.0.0.0",
+        "changelog": "Initial Minimal Release. btttr.cc remote image provider for Movies and TV Series; IMDb-first with TMDB fallback; per-type enable toggles; settings preview button; reset-to-defaults button; scheduled refresh task (24h default).",
+        "targetAbi": "10.11.0.0",
+        "sourceUrl": "https://github.com/CodeSieb/Jellyfin-Better-Posters/releases/download/v1.0.0/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip",
+        "checksum": "B796C8E54A2C3CC57A47E5F24CF13F54",
+        "timestamp": "2026-06-24T00:00:00Z"
+      }
+    ]
+  }
+]
