@@ -18,7 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent
 DLL_PATH = PROJECT_ROOT / "bin" / "Release" / "net9.0" / "Jellyfin.Plugin.BetterPosterMinimal.dll"
 OUT_DIR = PROJECT_ROOT / "releases"
-ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.4.1.zip"
+ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.4.2.zip"
 
 # Inner metadata that Jellyfin reads from inside the plugin zip.
 INNER_META = {
@@ -34,17 +34,15 @@ INNER_META = {
     "imageUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/Jellyfin-Better-Posters-Image.png",
     "name": "Better Poster Minimal",
     "targetAbi": "10.11.11.0",
-    "version": "1.0.4.1",
+    "version": "1.0.4.2",
     "framework": "net9.0",
     "timestamp": "2026-06-24T00:00:00Z",
     "changelog": (
-        "Add an 'Enable Ratings For Seasons' toggle (default off) so season-posters "
-        "that would have used the bare-rating path 'poster-r' now use the genre path "
-        "'poster-g' instead. btttr.cc does not render 'poster-r' for season variants "
-        "(the season URL silently 404'd against '/imdb/poster-default/tt...:season:N.jpg'); "
-        "the genre path absorbs rating into the bottom strip and renders correctly. "
-        "Movie and series behavior is unchanged. Carry through the 1.0.4.0 path-letter "
-        "fix and the URL Patterns Reference panel from the previous release."
+        "Drop the temporary development-time scaffolding (probe/ regression-test "
+        "project, release_*.bat build runner, update_manifest_*.py helper) so "
+        "the repo only carries ship code. Plugin DLL, settings page form, and "
+        "runtime behavior are unchanged from 1.0.4.1. Carry through the 1.0.4.1 "
+        "EnableRatingForSeasons toggle for season posters."
     ),
 }
 

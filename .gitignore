@@ -2,10 +2,6 @@
 bin/
 obj/
 
-# Regression probe (cd probe && dotnet run -c Release)
-probe/bin/
-probe/obj/
-
 # Python caches
 __pycache__/
 *.pyc

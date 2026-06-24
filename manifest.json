@@ -55,6 +55,14 @@
         "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.4.1.zip",
         "checksum": "3A4D21158ACB011CB7CD9C3B4A54A40C",
         "timestamp": "2026-06-24T00:00:00Z"
+      },
+      {
+        "version": "1.0.4.2",
+        "changelog": "Drop the temporary development-time scaffolding (probe/ regression-test project, release_*.bat build runner, update_manifest_*.py helper) so the repo only carries ship code. Plugin DLL, settings page form, and runtime behavior are unchanged from 1.0.4.1. Carry through the 1.0.4.1 EnableRatingForSeasons toggle for season posters.",
+        "targetAbi": "10.11.11.0",
+        "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.4.2.zip",
+        "checksum": "B74D9E096E26A5398EC5B15403190EAE",
+        "timestamp": "2026-06-24T00:00:00Z"
       }
     ]
   }

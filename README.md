@@ -4,7 +4,7 @@
 
 A focused remote-image provider for [Jellyfin](https://jellyfin.org) that surfaces **[btttr.cc](https://btttr.cc)** posters as the primary image for Movies, TV Series, and TV Seasons. IMDb‑first with an optional TMDB fallback, configurable overlay set, 18 languages, a scheduled refresh task, and a built‑in preview button — no API keys, no Trakt, no scraping, no telemetry.
 
-* **Version:** 1.0.4.0
+* **Version:** 1.0.4.2
 * **Target Jellyfin:** 10.11.x
 * **Runtime:** .NET 9.0
 * **GUID:** `c2f3aaf3-f591-4a4f-b7e2-a4f1bc9c7d1e`
@@ -85,7 +85,7 @@ The query string has three optional parts joined with `&`:
 * `lang=xx` — added when **Language** is not English (e.g. `lang=es`, `lang=fr`, `lang=zh`).
 * `rs=xx` — added when **Rating Source** is not "Average" (`IM` for IMDb, `TM` for TMDB, `RT` for Rotten Tomatoes, `MC` for Metacritic, `LB` for Letterboxd, `RE` for Roger Ebert).
 
-All seven user-facing example URLs in the settings page's *URL Patterns Reference* panel were verified against btttr.cc on 2026‑06‑24 to return HTTP 200 for `tt0111161` (Shawshank Redemption). The plugin also ships a regression probe under `probe/` (`cd probe && dotnet run -c Release` — exit 0 = all match) that re-asserts every example against the actual compiled `BtttrPosterUrlBuilder` on every release bump.
+All seven user-facing example URLs in the settings page's *URL Patterns Reference* panel were verified against btttr.cc on 2026‑06‑24 to return HTTP 200 for `tt0111161` (Shawshank Redemption).
 
 ## Requirements
 
@@ -235,9 +235,6 @@ md5sum releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
 └── releases/
     ├── Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
     └── Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip.md5
-└── probe/
-    ├── probe.csproj                 # Regression probe — references parent plugin
-    └── Program.cs                   # Asserts all 7 user-spec URLs match verbatim
 ```
 
 ## Credits and license
