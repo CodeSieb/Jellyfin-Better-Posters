@@ -18,7 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent
 DLL_PATH = PROJECT_ROOT / "bin" / "Release" / "net9.0" / "Jellyfin.Plugin.BetterPosterMinimal.dll"
 OUT_DIR = PROJECT_ROOT / "releases"
-ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.2.0.zip"
+ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.3.0.zip"
 
 # Inner metadata that Jellyfin reads from inside the plugin zip.
 INNER_META = {
@@ -33,8 +33,8 @@ INNER_META = {
     "id": "c2f3aaf3-f591-4a4f-b7e2-a4f1bc9c7d1e",
     "imageUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/Jellyfin-Better-Posters-Image.png",
     "name": "Better Poster Minimal",
-    "targetAbi": "10.11.0.0",
-    "version": "1.0.2.0",
+    "targetAbi": "10.11.11.0",
+    "version": "1.0.3.0",
     "framework": "net9.0",
     "timestamp": "2026-06-24T00:00:00Z",
     "changelog": (

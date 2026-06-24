@@ -4,7 +4,7 @@
 
 A focused remote-image provider for [Jellyfin](https://jellyfin.org) that surfaces **[btttr.cc](https://btttr.cc)** posters as the primary image for Movies, TV Series, and TV Seasons. IMDb‑first with an optional TMDB fallback, configurable overlay set, 18 languages, a scheduled refresh task, and a built‑in preview button — no API keys, no Trakt, no scraping, no telemetry.
 
-* **Version:** 1.0.2.0
+* **Version:** 1.0.3.0
 * **Target Jellyfin:** 10.11.x
 * **Runtime:** .NET 9.0
 * **GUID:** `c2f3aaf3-f591-4a4f-b7e2-a4f1bc9c7d1e`

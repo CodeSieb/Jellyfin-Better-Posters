@@ -31,6 +31,14 @@
         "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.2.0.zip",
         "checksum": "2511604B0BB619DFBB4F58CCBDD934CF",
         "timestamp": "2026-06-24T00:00:00Z"
+      },
+      {
+        "version": "1.0.3.0",
+        "changelog": "Rebuilt against Jellyfin.Controller 10.11.11 and Jellyfin.Model 10.11.11 NuGet packages so the plugin compiles against and matches the user-server Jellyfin.10.11.11 runtime. Plugin-now-reports pluginServiceRegistrator as a separate parameterless class and trigger type as TaskTriggerInfoType.IntervalTrigger (1.0.2.0 fix) carry through unchanged.",
+        "targetAbi": "10.11.11.0",
+        "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.3.0.zip",
+        "checksum": "E1E57C59CF90E97B89D644DDA14D2E0D",
+        "timestamp": "2026-06-24T00:00:00Z"
       }
     ]
   }
