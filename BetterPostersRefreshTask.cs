@@ -55,7 +55,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
             {
                 new TaskTriggerInfo
                 {
-                    Type = TaskTriggerInfoType.Interval,
+                    Type = TaskTriggerInfoType.IntervalTrigger,
                     IntervalTicks = TimeSpan.FromHours(24).Ticks
                 }
             };

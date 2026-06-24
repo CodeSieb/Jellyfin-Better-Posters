@@ -21,7 +21,7 @@
         "changelog": "Fix a startup crash on Jellyfin 10.11.x: registered services via BasePlugin<TConfig>.RegisterServices (the legacy IPluginServiceRegistrator path is no longer reliably called) and set TaskTriggerInfo.Type explicitly to TaskTriggerInfoType.Interval so the default 24 h trigger parses cleanly. No user-facing behavior changes from 1.0.0.",
         "targetAbi": "10.11.0.0",
         "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.1.0.zip",
-        "checksum": "D4BAFB94E45EA93597E68D943EFE3CE4",
+        "checksum": "046BC6FAA8574913106E51C2130A04B8",
         "timestamp": "2026-06-24T00:00:00Z"
       }
     ]
