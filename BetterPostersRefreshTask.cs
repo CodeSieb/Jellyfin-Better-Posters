@@ -16,9 +16,9 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
 {
     /// <summary>
     /// Scheduled task that walks the library and refreshes the primary
-    /// image on every Movie / TV Series that the plugin is configured to
-    /// cover. Default cadence: every 24 hours. Users can change it from
-    /// Dashboard → Scheduled Tasks.
+    /// image on every Movie / TV Series / TV Season that the plugin is
+    /// configured to cover. Default cadence: every 24 hours. Users can
+    /// change it from Dashboard → Scheduled Tasks.
     /// </summary>
     public class BetterPostersRefreshTask : IScheduledTask
     {
@@ -42,7 +42,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
         public string Name => "Better Poster - Refresh Posters";
         public string Key => "BetterPosterMinimalRefresh";
         public string Description =>
-            "Refreshes primary posters from btttr.cc on every Movie and TV Series " +
+            "Refreshes primary posters from btttr.cc on every Movie, TV Series, and TV Season " +
             "that the plugin is configured to cover.";
         public string Category => "Better Poster";
 
@@ -66,25 +66,29 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
 
             var configuration = Plugin.Instance?.Configuration ?? new Configuration.PluginConfiguration();
 
+            var kinds = new List<BaseItemKind>();
+            if (configuration.EnableForMovies) kinds.Add(BaseItemKind.Movie);
+            if (configuration.EnableForSeries) kinds.Add(BaseItemKind.Series);
+            if (configuration.EnableForSeasons) kinds.Add(BaseItemKind.Season);
+
+            if (kinds.Count == 0)
+            {
+                _logger.LogInformation("Better Poster: all item-type toggles are off. Skipping.");
+                progress?.Report(100);
+                return;
+            }
+
             var items = _libraryManager.GetItemList(new InternalItemsQuery
             {
-                IncludeItemTypes = new[] { BaseItemKind.Movie, BaseItemKind.Series },
+                IncludeItemTypes = kinds.ToArray(),
                 IsVirtualItem = false,
                 Recursive = true
             });
 
-            var filtered = new List<BaseItem>();
-            foreach (var item in items)
-            {
-                if (item is Movie && !configuration.EnableForMovies) continue;
-                if (item is Series && !configuration.EnableForSeries) continue;
-                filtered.Add(item);
-            }
-
-            int total = filtered.Count;
+            int total = items.Count;
             if (total == 0)
             {
-                _logger.LogInformation("Better Poster: no Movies or Series matched enabled kinds. Skipping.");
+                _logger.LogInformation("Better Poster: no items matched enabled kinds. Skipping.");
                 progress?.Report(100);
                 return;
             }
@@ -92,10 +96,13 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
             _logger.LogInformation("Better Poster: refreshing primary posters on {Total} item(s).", total);
 
             int done = 0;
-            foreach (var item in filtered)
+            int succeeded = 0;
+
+            foreach (var item in items)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                bool itemSucceeded = false;
                 try
                 {
                     await _providerManager
@@ -106,6 +113,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
                             ReplaceAllImages = true
                         }, cancellationToken)
                         .ConfigureAwait(false);
+                    itemSucceeded = true;
                 }
                 catch (OperationCanceledException)
                 {
@@ -116,11 +124,15 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
                     _logger.LogError(ex, "Better Poster: failed to refresh poster for item {Name}.", item.Name);
                 }
 
+                if (itemSucceeded) succeeded++;
                 done++;
                 progress?.Report((double)done / total * 100.0);
             }
 
-            _logger.LogInformation("Better Poster: scheduled refresh complete. {Done}/{Total} item(s) processed.", done, total);
+            _logger.LogInformation("Better Poster: scheduled refresh complete. {Succeeded}/{Total} item(s) processed.", succeeded, total);
+
+            if (succeeded > 0)
+                BtttrImageProvider.StampLastSuccessfulFetchUtc();
         }
     }
 }

@@ -1,4 +1,4 @@
-<div id="BetterPosterMinimalConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-button,emby-select,emby-checkbox">
+<div id="BetterPosterMinimalConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-button,emby-input,emby-select,emby-checkbox">
     <div data-role="content">
         <div class="content-primary">
             <form id="BetterPosterMinimalConfigForm">
@@ -120,12 +120,30 @@
 
                     <div class="checkboxContainer checkboxContainer-withDescription">
                         <label>
+                            <input is="emby-checkbox" type="checkbox" id="chkEnableForSeasons" name="EnableForSeasons" />
+                            <span>Enable for Season posters</span>
+                        </label>
+                        <div class="fieldDescription checkboxFieldDescription">
+                            Use the parent series' IMDb ID + the season number (e.g. <code>tt1234567:season:2</code>) so each season can have its own stylized poster.
+                        </div>
+                    </div>
+
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
                             <input is="emby-checkbox" type="checkbox" id="chkFallbackToTmdb" name="FallbackToTmdb" />
                             <span>Fallback to TMDB ID when IMDb is missing</span>
                         </label>
                         <div class="fieldDescription checkboxFieldDescription">
                             Useful for series that have only a TMDB ID.
                         </div>
+                    </div>
+
+                    <div class="sectionTitleContainer flex align-items-center justify-content-between" style="margin-top: 1em;">
+                        <h2 class="sectionTitle">Status</h2>
+                    </div>
+
+                    <div class="fieldDescription" id="lastFetchStatus">
+                        Loading…
                     </div>
 
                     <div class="sectionTitleContainer flex align-items-center justify-content-between" style="margin-top: 1em;">
@@ -175,8 +193,27 @@
                     Language: 'English',
                     EnableForMovies: true,
                     EnableForSeries: true,
+                    EnableForSeasons: true,
                     FallbackToTmdb: true
                 };
+
+                function formatLastFetch(iso) {
+                    if (!iso) return 'Last successful fetch: never. Try a library scan or click "Preview Poster" above.';
+                    try {
+                        var d = new Date(iso);
+                        if (isNaN(d.getTime())) return 'Last successful fetch: (unparseable timestamp).';
+                        var diffMs = Date.now() - d.getTime();
+                        var mins = Math.floor(diffMs / 60000);
+                        var pretty;
+                        if (mins < 1) pretty = 'just now';
+                        else if (mins < 60) pretty = mins + ' minute(s) ago';
+                        else if (mins < 60 * 24) pretty = Math.floor(mins / 60) + ' hour(s) ago';
+                        else pretty = Math.floor(mins / (60 * 24)) + ' day(s) ago';
+                        return 'Last successful fetch: ' + d.toLocaleString() + ' (' + pretty + ').';
+                    } catch (e) {
+                        return 'Last successful fetch: (error: ' + e + ').';
+                    }
+                }
 
                 function readForm(form) {
                     return {
@@ -189,6 +226,7 @@
                         Language: form.querySelector('#selectLanguage').value,
                         EnableForMovies: form.querySelector('#chkEnableForMovies').checked,
                         EnableForSeries: form.querySelector('#chkEnableForSeries').checked,
+                        EnableForSeasons: form.querySelector('#chkEnableForSeasons').checked,
                         FallbackToTmdb: form.querySelector('#chkFallbackToTmdb').checked
                     };
                 }
@@ -203,7 +241,10 @@
                     form.querySelector('#selectLanguage').value = config.Language || 'English';
                     form.querySelector('#chkEnableForMovies').checked = config.EnableForMovies !== false;
                     form.querySelector('#chkEnableForSeries').checked = config.EnableForSeries !== false;
+                    form.querySelector('#chkEnableForSeasons').checked = config.EnableForSeasons !== false;
                     form.querySelector('#chkFallbackToTmdb').checked = config.FallbackToTmdb !== false;
+                    var statusEl = form.querySelector('#lastFetchStatus');
+                    if (statusEl) statusEl.textContent = formatLastFetch(config.LastSuccessfulFetchUtc);
                 }
 
                 function buildPreviewUrl(form) {

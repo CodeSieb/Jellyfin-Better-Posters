@@ -6,7 +6,7 @@ using Jellyfin.Plugin.BetterPosterMinimal.Configuration;
 namespace Jellyfin.Plugin.BetterPosterMinimal
 {
     /// <summary>
-    /// Pure helper that builds a btttr.cc poster URL from an identifier
+    /// Pure helper that builds btttr.cc poster URLs from an identifier
     /// (IMDb or TMDB) and the current plugin configuration. No I/O, no state.
     /// </summary>
     public static class BtttrPosterUrlBuilder
@@ -16,6 +16,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
 
         private const string BaseUrl = "https://btttr.cc";
 
+        /// <summary>Builds a per-show URL with a verbatim id (IMDb or TMDB).</summary>
         public static string Build(string idSource, string id, PluginConfiguration configuration)
         {
             if (string.IsNullOrWhiteSpace(idSource))
@@ -24,35 +25,40 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
                 throw new ArgumentException("id must not be empty.", nameof(id));
 
             var path = GetPosterPath(configuration);
+            return AppendQuery(
+                string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0}/{1}/{2}/poster-default/{3}.jpg",
+                    BaseUrl,
+                    path,
+                    idSource,
+                    Uri.EscapeDataString(id)),
+                configuration);
+        }
+
+        /// <summary>
+        /// Builds a per-season URL using the parent's IMDb id and the season index.
+        /// btttr.cc's path matcher expects the structure `<imdb>:season:<n>.jpg`,
+        /// so we escape only the IMDb portion and concatenate the `:season:<n>`
+        /// suffix verbatim rather than passing the whole id through Uri.EscapeDataString.
+        /// </summary>
+        public static string BuildSeason(string imdbId, int seasonNumber, PluginConfiguration configuration)
+        {
+            if (string.IsNullOrWhiteSpace(imdbId))
+                throw new ArgumentException("imdbId must not be empty.", nameof(imdbId));
+            if (seasonNumber <= 0)
+                throw new ArgumentOutOfRangeException(nameof(seasonNumber), seasonNumber, "Season numbers are 1-based.");
+
+            var path = GetPosterPath(configuration);
             var url = string.Format(
                 CultureInfo.InvariantCulture,
-                "{0}/{1}/{2}/poster-default/{3}.jpg",
+                "{0}/{1}/{2}/poster-default/{3}:season:{4}.jpg",
                 BaseUrl,
                 path,
-                idSource,
-                Uri.EscapeDataString(id));
-
-            var queryParameters = new List<KeyValuePair<string, string>>();
-
-            if (!configuration.EnableTrendTags)
-                queryParameters.Add(new KeyValuePair<string, string>("tag", "none"));
-
-            var languageCode = GetLanguageCode(configuration.Language);
-            if (!string.IsNullOrEmpty(languageCode))
-                queryParameters.Add(new KeyValuePair<string, string>("lang", languageCode));
-
-            var ratingSourceCode = GetRatingSourceCode(configuration.RatingSource);
-            if (configuration.EnableRating && !string.IsNullOrEmpty(ratingSourceCode))
-                queryParameters.Add(new KeyValuePair<string, string>("rs", ratingSourceCode));
-
-            if (queryParameters.Count == 0)
-                return url;
-
-            return url + "?" + string.Join("&", queryParameters.ConvertAll(p => string.Format(
-                CultureInfo.InvariantCulture,
-                "{0}={1}",
-                Uri.EscapeDataString(p.Key),
-                Uri.EscapeDataString(p.Value))));
+                IdSourceImdb,
+                Uri.EscapeDataString(imdbId),
+                seasonNumber);
+            return AppendQuery(url, configuration);
         }
 
         public static string? GetLanguageCode(PosterLanguage language) => language switch
@@ -77,6 +83,31 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
             PosterLanguage.Czech => "cs",
             _ => null
         };
+
+        private static string AppendQuery(string url, PluginConfiguration configuration)
+        {
+            var queryParameters = new List<KeyValuePair<string, string>>();
+
+            if (!configuration.EnableTrendTags)
+                queryParameters.Add(new KeyValuePair<string, string>("tag", "none"));
+
+            var languageCode = GetLanguageCode(configuration.Language);
+            if (!string.IsNullOrEmpty(languageCode))
+                queryParameters.Add(new KeyValuePair<string, string>("lang", languageCode));
+
+            var ratingSourceCode = GetRatingSourceCode(configuration.RatingSource);
+            if (configuration.EnableRating && !string.IsNullOrEmpty(ratingSourceCode))
+                queryParameters.Add(new KeyValuePair<string, string>("rs", ratingSourceCode));
+
+            if (queryParameters.Count == 0)
+                return url;
+
+            return url + "?" + string.Join("&", queryParameters.ConvertAll(p => string.Format(
+                CultureInfo.InvariantCulture,
+                "{0}={1}",
+                Uri.EscapeDataString(p.Key),
+                Uri.EscapeDataString(p.Value))));
+        }
 
         private static string GetPosterPath(PluginConfiguration configuration)
         {

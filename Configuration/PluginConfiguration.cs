@@ -1,3 +1,4 @@
+using System;
 using MediaBrowser.Model.Plugins;
 
 namespace Jellyfin.Plugin.BetterPosterMinimal.Configuration
@@ -55,8 +56,15 @@ namespace Jellyfin.Plugin.BetterPosterMinimal.Configuration
         // Per-item toggles.
         public bool EnableForMovies { get; set; } = true;
         public bool EnableForSeries { get; set; } = true;
+        public bool EnableForSeasons { get; set; } = true;
 
         // When IMDb is missing, try TMDB. (Many series have TMDB as the primary ID.)
         public bool FallbackToTmdb { get; set; } = true;
+
+        // Telemetry-free: stores when the plugin last successfully fetched a poster.
+        // Updated whenever GetImageResponse returns a 2xx response, and whenever
+        // the scheduled refresh task completes without uncaught exception.
+        // Persisted to disk by BasePlugin<T> via SaveConfiguration().
+        public DateTime? LastSuccessfulFetchUtc { get; set; }
     }
 }
