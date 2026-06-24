@@ -15,15 +15,16 @@ A focused remote-image provider for [Jellyfin](https://jellyfin.org) that surfac
 
 1. [What it does](#what-it-does)
 2. [What it doesn't do](#what-it-doesnt-do)
-3. [Requirements](#requirements)
-4. [Installation](#installation)
-5. [Configuration](#configuration)
-6. [Scheduled refresh](#scheduled-refresh)
-7. [Per‑item usage](#per-item-usage)
-8. [Troubleshooting](#troubleshooting)
-9. [Build and release (maintainers)](#build-and-release-maintainers)
-10. [Repo layout](#repo-layout)
-11. [Credits and license](#credits-and-license)
+3. [How btttr.cc works](#how-bttrcc-works)
+4. [Requirements](#requirements)
+5. [Installation](#installation)
+6. [Configuration](#configuration)
+7. [Scheduled refresh](#scheduled-refresh)
+8. [Per‑item usage](#per-item-usage)
+9. [Troubleshooting](#troubleshooting)
+10. [Build and release (maintainers)](#build-and-release-maintainers)
+11. [Repo layout](#repo-layout)
+12. [Credits and license](#credits-and-license)
 
 ---
 
@@ -51,6 +52,12 @@ This is the **minimal**, focused fork of the parent BetterPoster plugin. To keep
 * No self‑hosted URL override — the upstream is always the public btttr.cc.
 * No per‑item UI override on a movie detail page — library‑level config is the only surface.
 * No client‑side caching layer — Jellyfin's image provider pipeline handles caching.
+
+## How btttr.cc works
+
+A btttr.cc URL is a *live render*, not a static file. When the plugin (or the **Preview Poster** button) fetches `https://btttr.cc/poster/imdb/poster-default/tt0111161.jpg` with the query string your toggles compose, btttr.cc's server reads the IMDb / TMDB entry, picks the poster + backdrop + rating / genre / age-rating / trending metadata, **composes those overlays at render time**, and returns a single 500×750 JPEG.
+
+That is why **Preview Poster** is meaningful even when the poster already looks right in your library: every toggle reshapes what the server composites on the next fetch. Flipping **Trend Tags** off in the settings page and clicking Preview returns a visibly different image — the rating strip, genre label, and quality chips all re-render with the new selection. The poster is never "cached on disk on btttr.cc's side" in a way you can request by variant name; the URL is the variant.
 
 ## Requirements
 
