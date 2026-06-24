@@ -4,7 +4,7 @@
 
 A focused remote-image provider for [Jellyfin](https://jellyfin.org) that surfaces **[btttr.cc](https://btttr.cc)** posters as the primary image for Movies, TV Series, and TV Seasons. IMDb‑first with an optional TMDB fallback, configurable overlay set, 18 languages, a scheduled refresh task, and a built‑in preview button — no API keys, no Trakt, no scraping, no telemetry.
 
-* **Version:** 1.0.3.0
+* **Version:** 1.0.4.0
 * **Target Jellyfin:** 10.11.x
 * **Runtime:** .NET 9.0
 * **GUID:** `c2f3aaf3-f591-4a4f-b7e2-a4f1bc9c7d1e`
@@ -60,6 +60,32 @@ This is the **minimal**, focused fork of the parent BetterPoster plugin. To keep
 A btttr.cc URL is a *live render*, not a static file. When the plugin (or the **Preview Poster** button) fetches `https://btttr.cc/poster/imdb/poster-default/tt0111161.jpg` with the query string your toggles compose, btttr.cc's server reads the IMDb / TMDB entry, picks the poster + backdrop + rating / genre / age-rating / trending metadata, **composes those overlays at render time**, and returns a single 500×750 JPEG.
 
 That is why **Preview Poster** is meaningful even when the poster already looks right in your library: every toggle reshapes what the server composites on the next fetch. Flipping **Trend Tags** off in the settings page and clicking Preview returns a visibly different image — the rating strip, genre label, and quality chips all re-render with the new selection. The poster is never "cached on disk on btttr.cc's side" in a way you can request by variant name; the URL is the variant.
+
+### URL scheme
+
+A btttr.cc URL has two parts: a path that encodes which overlays btttr.cc composites onto the poster, and an optional query string that suppresses trend tags, picks the overlay language, and picks the rating source. The path rule is:
+
+| Genre | Rating | Quality | Age | Path becomes |
+|-------|--------|---------|-----|--------------|
+| on    | on or off | on  | on  | `poster-gqa` |
+| on    | off    | off     | off | `poster-g`   |
+| off   | on     | off     | off | `poster-r`   |
+| on    | off    | on      | off | `poster-gq`  |
+| off   | on     | on      | off | `poster-rq`  |
+| on    | on     | off     | on  | `poster-ga`  |
+| off   | off    | off     | off | `poster-n`   |
+| off   | off    | on      | off | `poster-nq`  |
+| off   | off    | off     | on  | `poster-na`  |
+
+In short: the path always carries at least one of `g` (Genre overlay), `r` (Rating overlay), or `n` (neither). **Genre wins over Rating** — when Genre is on, the rating is rendered inside the same genre strip, so we omit `r`. Then `+q` if Quality tags is on, `+a` if Age rating is on.
+
+The query string has three optional parts joined with `&`:
+
+* `tag=none` — added only when **Trend Tags** is off (suppresses Trending / New / IMDb Top 3 stickers).
+* `lang=xx` — added when **Language** is not English (e.g. `lang=es`, `lang=fr`, `lang=zh`).
+* `rs=xx` — added when **Rating Source** is not "Average" (`IM` for IMDb, `TM` for TMDB, `RT` for Rotten Tomatoes, `MC` for Metacritic, `LB` for Letterboxd, `RE` for Roger Ebert).
+
+All seven user-facing example URLs in the settings page's *URL Patterns Reference* panel were verified against btttr.cc on 2026‑06‑24 to return HTTP 200 for `tt0111161` (Shawshank Redemption). The plugin also ships a regression probe under `probe/` (`cd probe && dotnet run -c Release` — exit 0 = all match) that re-asserts every example against the actual compiled `BtttrPosterUrlBuilder` on every release bump.
 
 ## Requirements
 
@@ -209,6 +235,9 @@ md5sum releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
 └── releases/
     ├── Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip
     └── Jellyfin.Plugin.BetterPosterMinimal-1.0.0.0.zip.md5
+└── probe/
+    ├── probe.csproj                 # Regression probe — references parent plugin
+    └── Program.cs                   # Asserts all 7 user-spec URLs match verbatim
 ```
 
 ## Credits and license

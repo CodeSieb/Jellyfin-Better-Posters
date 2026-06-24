@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Jellyfin.Plugin.BetterPosterMinimal.Probe</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BetterPosterMinimal.csproj" />
+  </ItemGroup>
+
+  <!--
+    The parent project's Jellyfin.Model / Jellyfin.Controller PackageReferences
+    use <ExcludeAssets>runtime</ExcludeAssets> so a real plugin DLL doesn't ship
+    its own runtime DLLs (the Jellyfin server supplies those on its probing
+    path). That exclusion is *correct* for a plugin DLL but *wrong* for any
+    standalone consumer that ProjectReferences the parent: transitive
+    PackageReference resolution propagates the parent's ExcludeAssets to the
+    consumer's bin folder, so running this probe via `dotnet run` crashes with
+    System.IO.FileNotFoundException: 'MediaBrowser.Model, Version=10.11.11.0'
+    at startup — before any of the 7 URL assertions get a chance to run.
+
+    Re-adding the same two packages here as DIRECT PackageReferences, with
+    <ExcludeAssets>none</ExcludeAssets> + <PrivateAssets>all</PrivateAssets>,
+    overrides the inherited exclusion only for this probe's output dir (so
+    MediaBrowser.Model.dll + MediaBrowser.Controller.dll DO land in
+    probe/bin/Release/net9.0/), and <PrivateAssets>all</PrivateAssets>
+    prevents them from leaking transitively into any project that would
+    ProjectReference this probe in the future (the probe is a leaf).
+  -->
+  <!--
+    BUMP TOGETHER WITH ../BetterPosterMinimal.csproj's Jellyfin.* references
+    so the probe runtime never lags behind the parent's compile-time ABI. If
+    a future contributor updates one without the other, the probe will assert
+    URL correctness against a stale Jellyfin.Model + a current parent DLL
+    (or vice versa) and either false-pass or false-fail with no useful signal.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Jellyfin.Model" Version="10.11.11">
+      <ExcludeAssets>none</ExcludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Jellyfin.Controller" Version="10.11.11">
+      <ExcludeAssets>none</ExcludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

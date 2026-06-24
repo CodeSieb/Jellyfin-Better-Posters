@@ -39,6 +39,14 @@
         "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.3.0.zip",
         "checksum": "E1E57C59CF90E97B89D644DDA14D2E0D",
         "timestamp": "2026-06-24T00:00:00Z"
+      },
+      {
+        "version": "1.0.4.0",
+        "changelog": "Add a URL Patterns Reference panel to the settings page documenting all seven supported btttr.cc URL variants. Fix GetPosterPath so the path letter is preserved whenever Genre is on (the previous XOR-style mapping produced a bare 'poster/' path when both Genre and Rating were on, which did not match the service's documented 'all combined' pattern 'poster-gqa'). Mirror the same path-letter rule inside the JS preview builder so the Dashboard URL always matches the URL the plugin actually composes. No behavior change beyond URL paths now correctly tracking the service's poster-<X> scheme. Compiled against Jellyfin.Controller / Jellyfin.Model 10.11.11.",
+        "targetAbi": "10.11.11.0",
+        "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.4.0.zip",
+        "checksum": "60AD6536CF26BF49CD1BAA1AD027D39E",
+        "timestamp": "2026-06-24T00:00:00Z"
       }
     ]
   }

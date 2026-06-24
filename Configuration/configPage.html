@@ -167,6 +167,68 @@
                         <div id="previewUrl" class="fieldDescription" style="word-break: break-all; margin-top: 0.5em;"></div>
                     </div>
 
+                    <div class="sectionTitleContainer flex align-items-center justify-content-between" style="margin-top: 1em;">
+                        <h2 class="sectionTitle">URL Patterns Reference</h2>
+                    </div>
+
+                    <div class="verticalFormContainer">
+                        <div class="fieldDescription">
+                            The plugin builds a btttr.cc URL from your toggle combination. Each row below maps to a real btttr.cc endpoint &mdash; all seven were verified to return HTTP&nbsp;200 on 2026&#8209;06&#8209;24 against <code>tt0111161</code> (Shawshank Redemption). The base URL is <code>https://btttr.cc/poster-X/{imdb | tmdb}/poster-default/{ID}.jpg</code> where the <code>X</code> suffix encodes the overlay set and an optional query string handles trend suppression, language, and rating source.
+                        </div>
+
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 0.5em; font-size: 0.9em;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid #555;">
+                                    <th style="text-align: left; padding: 0.4em 0.6em; width: 36%;">Toggles</th>
+                                    <th style="text-align: left; padding: 0.4em 0.6em;">URL pattern</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top;">Trend on (default), Genre off, Rating off, Quality off, Age off</td>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top; word-break: break-all;"><code>https://btttr.cc/poster-n/imdb/poster-default/{ID}.jpg</code></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top;">All overlays off (plain English)</td>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top; word-break: break-all;"><code>https://btttr.cc/poster-n/imdb/poster-default/{ID}.jpg<span style="color: #888;">?tag=none</span></code></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top;">Genre on, Rating off, Trend off</td>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top; word-break: break-all;"><code>https://btttr.cc/poster-g/imdb/poster-default/{ID}.jpg<span style="color: #888;">?tag=none</span></code></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top;">Rating on, Genre off, Trend off</td>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top; word-break: break-all;"><code>https://btttr.cc/poster-r/imdb/poster-default/{ID}.jpg<span style="color: #888;">?tag=none</span></code></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top;">Quality on, Genre off, Rating off, Trend on</td>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top; word-break: break-all;"><code>https://btttr.cc/poster-nq/imdb/poster-default/{ID}.jpg</code></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top;">Age on, Genre off, Rating off, Trend off</td>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top; word-break: break-all;"><code>https://btttr.cc/poster-na/imdb/poster-default/{ID}.jpg<span style="color: #888;">?tag=none</span></code></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top;">Genre on, Quality on, Age on, Trend on (Rating on or off &mdash; "all combined")</td>
+                                    <td style="padding: 0.4em 0.6em; vertical-align: top; word-break: break-all;"><code>https://btttr.cc/poster-gqa/imdb/poster-default/{ID}.jpg</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="fieldDescription" style="margin-top: 0.5em;">
+                            <strong>Path letter rule:</strong>
+                            <code>g</code>&nbsp;&mdash; Genre is on (Rating renders inside the genre strip so we omit <code>r</code>).
+                            <code>r</code>&nbsp;&mdash; Rating is on but Genre is off (rating stands alone).
+                            <code>n</code>&nbsp;&mdash; neither Genre nor Rating on.
+                            Then <code>+q</code> if Quality tags on, <code>+a</code> if Age rating on. The path always carries at least one of those three letters so the URL never collapses to a bare <code>poster/</code>.
+                        </div>
+
+                        <div class="fieldDescription" style="margin-top: 0.5em;">
+                            <strong>Query string:</strong>
+                            <code>tag=none</code> is added only when Trend Tags is off; <code>lang=xx</code> is added when Language is not English (e.g.&nbsp;<code>lang=es</code>, <code>lang=fr</code>); <code>rs=xx</code> is added when Rating Source is not &ldquo;Average&rdquo; (<code>IM</code> / <code>TM</code> / <code>RT</code> / <code>MC</code> / <code>LB</code> / <code>RE</code>).
+                        </div>
+                    </div>
+
                     <div style="display: flex; gap: 0.75em; margin-top: 1.5em;">
                         <button is="emby-button" type="submit" class="raised button-submit block emby-button" style="flex: 1;">
                             <span>Save</span>
@@ -266,14 +328,16 @@
                         Metacritic: 'MC', Letterboxd: 'LB', RogerEbert: 'RE'
                     };
 
-                    var suffix = '';
-                    if (c.EnableGenre && c.EnableRating) suffix = '';
-                    else if (!c.EnableGenre && c.EnableRating) suffix = 'r';
-                    else if (c.EnableGenre && !c.EnableRating) suffix = 'g';
-                    else suffix = 'n';
+                    // Path-letter rule — mirrors C# BtttrPosterUrlBuilder.GetPosterPath
+                    // exactly so Dashboard always shows the URL the plugin will compose.
+                    // 'g' if Genre on (absorbs Rating into the same strip); 'r' if
+                    // Rating on but Genre off; 'n' if neither. Then '+q' for quality,
+                    // '+a' for age. Path always carries at least one of {g,r,n}.
+                    var baseLetter = c.EnableGenre ? 'g' : (c.EnableRating ? 'r' : 'n');
+                    var suffix = baseLetter;
                     if (c.EnableQualityTags) suffix += 'q';
                     if (c.EnableAgeRating) suffix += 'a';
-                    var path = suffix.length ? 'poster-' + suffix : 'poster';
+                    var path = 'poster-' + suffix;
 
                     var qs = [];
                     if (!c.EnableTrendTags) qs.push('tag=none');

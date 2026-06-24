@@ -111,13 +111,25 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
 
         private static string GetPosterPath(PluginConfiguration configuration)
         {
-            var suffix = (configuration.EnableGenre, configuration.EnableRating) switch
-            {
-                (true, true) => string.Empty,
-                (false, true) => "r",
-                (true, false) => "g",
-                (false, false) => "n"
-            };
+            // Path letter rule (matches btttr.cc's poster-<X> scheme; verified on
+            // 2026-06-24 that EVERY user-spec pattern returns HTTP 200 from btttr.cc
+            // for `tt0111161`, and that `poster-gr` returns 404 => dropping 'r' when
+            // Genre is on is the correct behaviour):
+            //   - 'g' = Genre overlay on (Rating piggybacks into the same bottom
+            //           strip, so we omit 'r' when both Genre and Rating are on).
+            //   - 'r' = Rating overlay on, Genre off (rating renders as its own strip).
+            //   - 'n' = neither Genre nor Rating on (plain poster).
+            //   - + 'q' = Quality tags on (4K / Dolby Vision / Atmos badges).
+            //   - + 'a' = Age-rating chip on (PG-13 / TV-MA / R / etc.).
+            // The path always carries at least one of {g, r, n}, so the URL never
+            // collapses to a bare `poster/` when the plain poster would no longer
+            // match the rendered variant on the service.
+            string baseLetter =
+                configuration.EnableGenre ? "g"
+                : configuration.EnableRating ? "r"
+                : "n";
+
+            var suffix = baseLetter;
 
             if (configuration.EnableQualityTags)
                 suffix += "q";
@@ -125,7 +137,7 @@ namespace Jellyfin.Plugin.BetterPosterMinimal
             if (configuration.EnableAgeRating)
                 suffix += "a";
 
-            return string.IsNullOrEmpty(suffix) ? "poster" : "poster-" + suffix;
+            return "poster-" + suffix;
         }
 
         private static string? GetRatingSourceCode(PosterRatingSource ratingSource) => ratingSource switch

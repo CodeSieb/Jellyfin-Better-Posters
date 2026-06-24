@@ -18,7 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent
 DLL_PATH = PROJECT_ROOT / "bin" / "Release" / "net9.0" / "Jellyfin.Plugin.BetterPosterMinimal.dll"
 OUT_DIR = PROJECT_ROOT / "releases"
-ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.3.0.zip"
+ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.4.0.zip"
 
 # Inner metadata that Jellyfin reads from inside the plugin zip.
 INNER_META = {
@@ -34,18 +34,19 @@ INNER_META = {
     "imageUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/Jellyfin-Better-Posters-Image.png",
     "name": "Better Poster Minimal",
     "targetAbi": "10.11.11.0",
-    "version": "1.0.3.0",
+    "version": "1.0.4.0",
     "framework": "net9.0",
     "timestamp": "2026-06-24T00:00:00Z",
     "changelog": (
-        "Fix a runtime registration failure on Jellyfin 10.11.x where PluginManager's "
-        "IPluginServiceRegistrator discovery expects a parameterless constructor on the "
-        "registrar type. Moved IPluginServiceRegistrator implementation off Plugin (whose "
-        "BasePlugin<T> base requires non-default DI services) and into a dedicated "
-        "PluginServiceRegistrator class with a parameterless constructor. Also sets "
-        "TaskTriggerInfo.Type to TaskTriggerInfoType.IntervalTrigger so the default 24 h "
-        "scheduler trigger parses cleanly under current Jellyfin.Model API. No behavior "
-        "changes for end users."
+        "Add a URL Patterns Reference panel to the settings page that documents all "
+        "seven btttr.cc URL variants and the path-letter rule (verified live HTTP 200 on "
+        "2026-06-24 against tt0111161). Fix GetPosterPath so 'g' is preserved in the "
+        "path whenever Genre is on — the previous XOR-style mapping collapsed to a bare "
+        "'poster/' path when both Genre and Rating were on, which did not match the "
+        "service's documented 'all combined' pattern 'poster-gqa'. Mirror the same "
+        "path-letter rule inside the JS preview-builder so the Dashboard URL always "
+        "matches the URL the plugin actually composes. No public behavior change beyond "
+        "URL paths now correctly tracking the service's documented poster-<X> scheme."
     ),
 }
 

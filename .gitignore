@@ -1,6 +1,10 @@
-# Build output
+# Build output (top-level)
 bin/
 obj/
+
+# Regression probe (cd probe && dotnet run -c Release)
+probe/bin/
+probe/obj/
 
 # Python caches
 __pycache__/
