@@ -55,6 +55,8 @@ This is the **minimal**, focused fork of the parent BetterPoster plugin. To keep
 
 ## How btttr.cc works
 
+*Live-render design by [btttr.cc](https://btttr.cc) — there is no formal status page; check the [Issue tracker](https://github.com/CodeSieb/Jellyfin-Better-Posters/issues) when posters start 404ing across the library.*
+
 A btttr.cc URL is a *live render*, not a static file. When the plugin (or the **Preview Poster** button) fetches `https://btttr.cc/poster/imdb/poster-default/tt0111161.jpg` with the query string your toggles compose, btttr.cc's server reads the IMDb / TMDB entry, picks the poster + backdrop + rating / genre / age-rating / trending metadata, **composes those overlays at render time**, and returns a single 500×750 JPEG.
 
 That is why **Preview Poster** is meaningful even when the poster already looks right in your library: every toggle reshapes what the server composites on the next fetch. Flipping **Trend Tags** off in the settings page and clicking Preview returns a visibly different image — the rating strip, genre label, and quality chips all re-render with the new selection. The poster is never "cached on disk on btttr.cc's side" in a way you can request by variant name; the URL is the variant.
