@@ -31,7 +31,7 @@ INNER_META = {
     "overview": "Just the better posters, from btttr.cc.",
     "owner": "CodeSieb",
     "id": "c2f3aaf3-f591-4a4f-b7e2-a4f1bc9c7d1e",
-    "imageUrl": "https://raw.githubusercontent.com/TheAceOfficials/BetterPoster-for-Jellyfin/main/cover.png",
+    "imageUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/Jellyfin-Better-Posters-Image.png",
     "name": "Better Poster Minimal",
     "targetAbi": "10.11.0.0",
     "version": "1.0.0.0",
