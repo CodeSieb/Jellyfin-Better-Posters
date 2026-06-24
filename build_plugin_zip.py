@@ -18,7 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent
 DLL_PATH = PROJECT_ROOT / "bin" / "Release" / "net9.0" / "Jellyfin.Plugin.BetterPosterMinimal.dll"
 OUT_DIR = PROJECT_ROOT / "releases"
-ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.1.0.zip"
+ZIP_NAME = "Jellyfin.Plugin.BetterPosterMinimal-1.0.2.0.zip"
 
 # Inner metadata that Jellyfin reads from inside the plugin zip.
 INNER_META = {
@@ -34,15 +34,18 @@ INNER_META = {
     "imageUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/Jellyfin-Better-Posters-Image.png",
     "name": "Better Poster Minimal",
     "targetAbi": "10.11.0.0",
-    "version": "1.0.1.0",
+    "version": "1.0.2.0",
     "framework": "net9.0",
     "timestamp": "2026-06-24T00:00:00Z",
     "changelog": (
-        "Fix a startup crash on Jellyfin 10.11.x: registered services through "
-        "BasePlugin<TConfig>.RegisterServices (the legacy IPluginServiceRegistrator path "
-        "is no longer reliably called by the plugin loader) and set TaskTriggerInfo.Type "
-        "explicitly to TaskTriggerInfoType.Interval so the default 24 h trigger parses "
-        "cleanly. No user-facing behavior changes from 1.0.0."
+        "Fix a runtime registration failure on Jellyfin 10.11.x where PluginManager's "
+        "IPluginServiceRegistrator discovery expects a parameterless constructor on the "
+        "registrar type. Moved IPluginServiceRegistrator implementation off Plugin (whose "
+        "BasePlugin<T> base requires non-default DI services) and into a dedicated "
+        "PluginServiceRegistrator class with a parameterless constructor. Also sets "
+        "TaskTriggerInfo.Type to TaskTriggerInfoType.IntervalTrigger so the default 24 h "
+        "scheduler trigger parses cleanly under current Jellyfin.Model API. No behavior "
+        "changes for end users."
     ),
 }
 

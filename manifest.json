@@ -23,6 +23,14 @@
         "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.1.0.zip",
         "checksum": "046BC6FAA8574913106E51C2130A04B8",
         "timestamp": "2026-06-24T00:00:00Z"
+      },
+      {
+        "version": "1.0.2.0",
+        "changelog": "Fix a runtime registration failure on Jellyfin 10.11.x where PluginManager's IPluginServiceRegistrator discovery expects a parameterless constructor on the registrar type. Moved IPluginServiceRegistrator off Plugin (whose BasePlugin<T> base requires non-default DI services) and into a dedicated PluginServiceRegistrator class with a parameterless constructor. Also sets TaskTriggerInfo.Type to TaskTriggerInfoType.IntervalTrigger so the default 24 h scheduler trigger parses cleanly under current Jellyfin.Model API. No behavior changes for end users.",
+        "targetAbi": "10.11.0.0",
+        "sourceUrl": "https://raw.githubusercontent.com/CodeSieb/Jellyfin-Better-Posters/main/releases/Jellyfin.Plugin.BetterPosterMinimal-1.0.2.0.zip",
+        "checksum": "2511604B0BB619DFBB4F58CCBDD934CF",
+        "timestamp": "2026-06-24T00:00:00Z"
       }
     ]
   }
